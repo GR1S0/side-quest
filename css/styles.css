@@ -1,0 +1,206 @@
+/* SideQuest — the abyss: deep petrol ground, pale text, and a gold pulled
+   toward the amber of the gem (the logo) for experience and highlights.
+   Petrol is amber's complement, so the gem glows; it also keeps SideQuest
+   apart from the quests' own worlds (the pelvic floor's is plum). Pangaia carries the lettering
+   (Ultrabold for the mark, Light for ranks and titles), Neue Montreal the
+   reading, Fraktion Mono the numbers (the game's HUD).
+   Layout: one narrow column, like a quest log held in the hand. Quests keep
+   their own look inside. */
+:root {
+  --bg: #0b1b20;
+  --panel: #11282e;
+  --panel-2: #18343b;
+  --text: #e9efe9;
+  --muted: #93aaa9;
+  --line: #22424a;
+  --gold: #eca846;
+  --on-gold: #1c1206;
+  --ember: #ff8a3d;
+  --card-shadow: drop-shadow(0 14px 22px rgb(0 0 0 / 0.55)) drop-shadow(0 2px 3px rgb(0 0 0 / 0.35));
+  --coin-hi: #ffd37a;
+  --coin: #eca846;
+  --coin-lo: #c97a16;
+  --on-coin: #1c1206;
+  --coin-glow: rgb(236 168 70 / 0.35);
+  --ok: #7cc9a0;
+  --warn: #e8bd62;
+  --bad: #ee7a68;
+  --display: "PP Pangaia", Georgia, "Times New Roman", serif;
+  --body: "PP Neue Montreal", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "PP Fraktion Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #eef3f1;
+    --panel: #fafcfb;
+    --panel-2: #dfe8e5;
+    --text: #13201f;
+    --muted: #5d706d;
+    --line: #cfdcd8;
+    --gold: #a4630e;
+    --on-gold: #fff8ef;
+    --ember: #c4531a;
+    --card-shadow: drop-shadow(0 10px 18px rgb(19 32 31 / 0.14)) drop-shadow(0 1px 2px rgb(19 32 31 / 0.1));
+    --coin-glow: rgb(201 122 22 / 0.25);
+    --ok: #1f8a55;
+    --warn: #a87700;
+    --bad: #c4402c;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #eef3f1;
+  --panel: #fafcfb;
+  --panel-2: #dfe8e5;
+  --text: #13201f;
+  --muted: #5d706d;
+  --line: #cfdcd8;
+  --gold: #a4630e;
+  --on-gold: #fff8ef;
+  --ember: #c4531a;
+  --card-shadow: drop-shadow(0 10px 18px rgb(19 32 31 / 0.14)) drop-shadow(0 1px 2px rgb(19 32 31 / 0.1));
+  --coin-glow: rgb(201 122 22 / 0.25);
+  --ok: #1f8a55;
+  --warn: #a87700;
+  --bad: #c4402c;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 16px/1.5 var(--body);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, p, ul { margin: 0; }
+a { color: inherit; text-decoration: none; }
+svg { width: 1.25em; height: 1.25em; flex: none; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+
+#app {
+  max-width: 560px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+/* A quest page runs edge to edge with its own design. */
+#app.bleed { max-width: none; padding: 0; display: block; }
+.loading { font: 400 13px var(--mono); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Squircle rule: every rounded box in SideQuest is a squircle, never a plain
+   rounded rectangle. Mark it data-sq="<radius>" (js/squircle.js draws the
+   shape) and style it with --sq-fill, --sq-edge, --sq-edge-width, --sq-shadow.
+   True circles (the level seal, pips, status dots) stay circles. */
+[data-sq] { position: relative; isolation: isolate; }
+.sq { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; overflow: visible; pointer-events: none; filter: var(--sq-shadow, none); }
+.sq path { fill: var(--sq-fill, transparent); stroke: var(--sq-edge, transparent); stroke-width: var(--sq-edge-width, 0); transition: stroke 0.2s, fill 0.2s; }
+
+/* ── Masthead ── */
+.masthead { display: flex; flex-direction: column; gap: 6px; }
+.wordmark {
+  display: flex; align-items: center; gap: 12px;
+  font: 800 clamp(2.4rem, 11vw, 3.4rem)/1 var(--display);
+  letter-spacing: 0.02em;
+}
+/* The mark: a pear-cut amber gem, with a soft glow of its own colour. */
+.mark { height: 0.95em; width: auto; flex: none; filter: drop-shadow(0 0 0.18em rgb(240 150 40 / 0.35)); }
+.tagline { font: 400 12px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+/* ── HUD: level seal and experience ── */
+.hud { display: flex; align-items: center; gap: 18px; }
+/* The level seal is an amber coin, the gem's colour, with a heavy dark numeral. */
+.seal {
+  width: 76px; height: 76px; flex: none; display: grid; place-items: center;
+  border-radius: 50%; border: 1.5px solid var(--coin-hi);
+  background: radial-gradient(circle at 35% 30%, var(--coin-hi), var(--coin) 55%, var(--coin-lo));
+  box-shadow: inset 0 0 0 6px rgb(28 18 6 / 0.3), 0 0 18px var(--coin-glow);
+  color: var(--on-coin);
+}
+.seal span { font: 800 2.55rem/1 var(--display); -webkit-text-stroke: 0.7px currentColor; transform: translateY(-2px); }
+.hud-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.hud-rank { font: 300 1.5rem/1 var(--display); letter-spacing: 0.03em; }
+.xp { height: 6px; border-radius: 99px; background: var(--panel-2); overflow: hidden; }
+.xp span { display: block; height: 100%; background: var(--gold); border-radius: inherit; transition: width 0.6s ease; }
+.hud-meta { display: flex; justify-content: space-between; font: 400 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ── Quest board ── */
+.board { display: flex; flex-direction: column; gap: 14px; }
+.rule-title {
+  display: flex; align-items: center; gap: 14px;
+  font: 300 1.45rem/1.1 var(--display); letter-spacing: 0.04em; color: var(--text);
+}
+.rule-title::before, .rule-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--line) 30%, var(--line) 70%, transparent); }
+.board-meta { font: 400 12px var(--mono); color: var(--muted); text-align: center; letter-spacing: 0.06em; margin-top: -6px; }
+.quests { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+/* Each quest card is a window onto its world: it takes the faces and palette
+   from the quest's .w-<id> tokens (--w-*), not from SideQuest's. */
+.quest {
+  display: flex; align-items: center; gap: 14px; padding: 18px 16px;
+  color: var(--w-ink, var(--text));
+  font-family: var(--w-body, var(--body));
+  --sq-fill: var(--w-bg, var(--panel));
+  --sq-edge: color-mix(in srgb, var(--w-mark, var(--gold)) 40%, var(--w-line, var(--line)));
+  --sq-edge-width: 1.5px;
+  --sq-shadow: var(--card-shadow);
+  transition: transform 0.15s;
+}
+.quest:hover { --sq-edge: var(--w-mark, var(--gold)); }
+.quest:active { transform: scale(0.985); }
+.quest-icon {
+  width: 46px; height: 46px; flex: none; display: grid; place-items: center;
+  color: var(--w-mark); --sq-fill: color-mix(in srgb, var(--w-mark) 16%, transparent);
+}
+.quest-icon svg:not(.sq) { width: 24px; height: 24px; }
+.quest.is-done .quest-icon { color: var(--w-on-mark); --sq-fill: var(--w-mark); --sq-shadow: drop-shadow(0 0 10px var(--w-glow)); }
+.quest-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.quest-kicker { font: 600 10.5px/1.3 var(--w-mono, var(--mono)); letter-spacing: 0.12em; text-transform: uppercase; color: var(--w-ink2, var(--muted)); }
+.quest-title { font: 400 1.75rem/1 var(--w-display, var(--display)); letter-spacing: -0.01em; }
+.quest-title em { font-style: normal; color: var(--w-accent); }
+.quest-detail { font: 600 11.5px/1.35 var(--w-mono, var(--mono)); color: var(--w-ink2, var(--muted)); }
+.quest-stats { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; }
+.pips { display: inline-flex; gap: 4px; }
+.pips i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--w-ink2, var(--muted)); opacity: 0.7; }
+.pips i.on { background: var(--w-mark); border-color: var(--w-mark); opacity: 1; }
+.streak { display: inline-flex; align-items: center; gap: 3px; font: 600 12px var(--w-mono, var(--mono)); color: var(--w-accent, var(--ember)); }
+.streak svg { width: 14px; height: 14px; }
+.streak.is-zero { color: var(--w-ink2, var(--muted)); opacity: 0.7; }
+.i-flame { fill: currentColor; fill-opacity: 0.25; }
+.chev { color: var(--w-ink2, var(--muted)); display: flex; }
+.chev svg { width: 18px; height: 18px; }
+
+/* ── Setup (installed app, first launch) ── */
+.setup { display: flex; flex-direction: column; gap: 10px; padding: 22px 20px; --sq-fill: var(--panel); --sq-edge: var(--line); --sq-edge-width: 1px; --sq-shadow: var(--card-shadow); }
+.setup h2 { font: 300 1.6rem/1.1 var(--display); }
+.setup-lead { color: var(--muted); font-size: 0.95rem; margin-bottom: 6px; }
+.setup label { font: 400 11.5px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.setup input { font: 400 16px var(--mono); color: var(--text); background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%; }
+.setup input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.setup-btn { margin-top: 8px; min-height: 50px; border: 0; background: none; cursor: pointer; font: 500 1rem var(--body); color: var(--on-coin); --sq-fill: var(--coin); }
+.setup-note { font: 400 11.5px var(--mono); color: var(--muted); }
+.unlink { align-self: flex-start; background: none; border: 0; padding: 0; cursor: pointer; font: 400 11.5px var(--mono); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Footer ── */
+.foot { margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+.sync { display: inline-flex; align-items: center; gap: 8px; font: 400 11.5px var(--mono); color: var(--muted); letter-spacing: 0.04em; }
+.sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.sync[data-state="ok"]::before { background: var(--ok); }
+.sync[data-state="busy"]::before { background: var(--warn); }
+.sync[data-state="err"]::before { background: var(--bad); }
+.sync[data-state="err"] { color: var(--bad); }
+.install { font-size: 0.88rem; color: var(--muted); }
+.install summary { cursor: pointer; font: 400 11.5px var(--mono); letter-spacing: 0.04em; }
+.install p { margin-top: 8px; max-width: 60ch; }
+.install strong { color: var(--text); font-weight: 500; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
+}
