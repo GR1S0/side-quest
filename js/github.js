@@ -5,7 +5,15 @@
 const CFG_KEY = 'sq-gh';
 const API = 'https://api.github.com';
 
+let session = null;
+
+// The config for this launch only, when the device asks for the code every time.
+export function setSessionConfig(cfg) {
+  session = cfg;
+}
+
 export function ghConfig() {
+  if (session) return session;
   try {
     return JSON.parse(localStorage.getItem(CFG_KEY)) || null;
   } catch {

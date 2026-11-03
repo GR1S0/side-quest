@@ -188,6 +188,19 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .setup-note { font: 400 11.5px var(--mono); color: var(--muted); }
 .unlink { align-self: flex-start; background: none; border: 0; padding: 0; cursor: pointer; font: 400 11.5px var(--mono); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 
+/* ── Unlock (installed app, opened with the code) ── */
+.unlock { display: flex; flex-direction: column; gap: 12px; padding: 24px 20px; text-align: center; --sq-fill: var(--panel); --sq-edge: var(--line); --sq-edge-width: 1px; --sq-shadow: var(--card-shadow); }
+.unlock > div, .unlock > form { display: flex; flex-direction: column; gap: 12px; }
+.unlock label, .unlock p { color: var(--muted); font-size: 0.95rem; }
+.unlock input { font: 400 26px var(--mono); letter-spacing: 0.32em; text-align: center; color: var(--text); background: var(--panel-2); border: 1px solid var(--line); border-radius: 14px; padding: 14px 10px; width: 100%; }
+.unlock input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+.unlock-go, .unlock-alt { min-height: 52px; border: 0; background: none; cursor: pointer; font: 500 1rem var(--body); }
+.unlock-go { color: var(--on-coin); --sq-fill: var(--coin); }
+.unlock-go:disabled { opacity: 0.6; cursor: default; }
+.unlock-alt { color: var(--text); --sq-fill: var(--panel-2); --sq-edge: var(--line); --sq-edge-width: 1px; }
+.unlock-link { background: none; border: 0; padding: 6px; cursor: pointer; font: 400 12px var(--mono); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.unlock-err { color: var(--bad); min-height: 1.4em; font-size: 0.9rem; }
+
 /* ── Footer ── */
 .foot { margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
 .sync { display: inline-flex; align-items: center; gap: 8px; font: 400 11.5px var(--mono); color: var(--muted); letter-spacing: 0.04em; }

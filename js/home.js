@@ -57,8 +57,7 @@ export function homeView(root) {
       btn.textContent = 'Tocca di nuovo per scollegare (i dati restano su GitHub)';
       return;
     }
-    localStorage.removeItem('sq-gh');
-    localStorage.removeItem('sq-gh-cache');
+    ['sq-gh', 'sq-gh-cache', 'sq-bio', 'sq-bio-wait', 'sq-ask'].forEach((k) => localStorage.removeItem(k));
     location.reload();
   });
   return () => {

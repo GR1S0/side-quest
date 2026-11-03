@@ -4,7 +4,7 @@
 import { quests, getQuest } from '../quests/index.js';
 import { initStore } from './store.js';
 import { homeView } from './home.js';
-import { setupView } from './setup.js';
+import { unlockView } from './unlock.js';
 
 const root = document.getElementById('app');
 let cleanup = null;
@@ -30,7 +30,11 @@ document.addEventListener('click', (e) => {
 
 document.head.append(Object.assign(document.createElement('style'), { textContent: quests.map((q) => q.world.css).join('\n') }));
 root.innerHTML = '<p class="loading">Apro la mappa…</p>';
-const mode = await initStore(quests.map((q) => q.id));
-const start = location.hash.slice(1);
-if (mode === 'setup') setupView(root);
-else go(getQuest(start) ? `/quest/${start}` : '/');
+// The installed app opens with its code first (unlock.js), then loads the data.
+async function start() {
+  const mode = await initStore(quests.map((q) => q.id));
+  const first = location.hash.slice(1);
+  if (mode === 'setup') unlockView(root, { onUnlock: start });
+  else go(getQuest(first) ? `/quest/${first}` : '/');
+}
+start();
