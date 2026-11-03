@@ -91,7 +91,8 @@ export async function initStore(ids) {
     }
   }
   setStatus('local', 'Solo su questo dispositivo');
-  mode = location.hostname.endsWith('github.io') ? 'setup' : 'local';
+  // The installable build marks its page (standalone/build_pages.py), whatever its domain.
+  mode = document.documentElement.dataset.app === 'standalone' ? 'setup' : 'local';
   return mode;
 }
 
