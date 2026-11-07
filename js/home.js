@@ -4,7 +4,32 @@ import { esc, playerLevel, pips } from './util.js';
 import { icon } from './icons.js';
 import { applySquircles } from './squircle.js';
 
+// The home registers its listeners once and redraws itself in place when data
+// arrives from another device. (It used to call itself again, adding a new
+// listener on every redraw while the listeners were being called: the page
+// looped forever as soon as another device had saved something.)
 export function homeView(root) {
+  let offSquircles = () => {};
+  const render = () => {
+    offSquircles();
+    offSquircles = draw(root);
+  };
+  render();
+  const offStatus = store.onStatus((s) => {
+    const sync = root.querySelector('[data-el=sync]');
+    if (!sync) return;
+    sync.dataset.state = s.state;
+    sync.textContent = s.text;
+  });
+  const offRemote = store.onRemote(render);
+  return () => {
+    offSquircles();
+    offStatus();
+    offRemote();
+  };
+}
+
+function draw(root) {
   const totalXP = quests.reduce((sum, q) => sum + q.xp(store.get(q.id)), 0);
   const pl = playerLevel(totalXP);
   const cards = quests.map((q) => ({ q, s: q.summary(store.get(q.id)) }));
@@ -43,13 +68,6 @@ export function homeView(root) {
       ${store.mode() === 'github' ? '<button class="unlink" type="button" data-act="unlink">Scollega questo dispositivo dai dati</button>' : ''}
     </footer>`;
 
-  const offSquircles = applySquircles(root);
-  const sync = root.querySelector('[data-el=sync]');
-  const offStatus = store.onStatus((s) => {
-    sync.dataset.state = s.state;
-    sync.textContent = s.text;
-  });
-  const offRemote = store.onRemote(() => homeView(root));
   root.querySelector('[data-act=unlink]')?.addEventListener('click', (e) => {
     const btn = e.currentTarget;
     if (btn.dataset.confirm !== '1') {
@@ -60,11 +78,7 @@ export function homeView(root) {
     ['sq-gh', 'sq-gh-cache', 'sq-bio', 'sq-bio-wait', 'sq-ask'].forEach((k) => localStorage.removeItem(k));
     location.reload();
   });
-  return () => {
-    offSquircles();
-    offStatus();
-    offRemote();
-  };
+  return applySquircles(root);
 }
 
 function questCard({ q, s }) {

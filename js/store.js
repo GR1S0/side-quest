@@ -50,7 +50,8 @@ function applyRemote(id, data) {
   } else {
     docs[id] = clone(data);
   }
-  remoteListeners.forEach((fn) => fn(id));
+  // A copy: a listener that registers another one must not be called in a loop.
+  [...remoteListeners].forEach((fn) => fn(id));
 }
 
 // Resolves to 'claude', 'github', 'local', or 'setup' (the installed app before
