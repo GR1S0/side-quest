@@ -9,7 +9,8 @@
 // xp(data) → experience earned so far, derived from the quest's own data.
 // view(root) → optional cleanup function.
 import pelvicFloor from './pelvic-floor/index.js';
+import face from './face/index.js';
 
-export const quests = [pelvicFloor];
+export const quests = [pelvicFloor, face];
 
 export const getQuest = (id) => quests.find((q) => q.id === id);

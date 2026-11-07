@@ -95,8 +95,10 @@ export function github({ repo, token }) {
     },
 
     // Registers the fonts listed in fonts/fonts.json, cached on the device after the first time.
+    // The cache name carries a version: bump it when fonts are added, so devices fetch the new list.
     async loadFonts() {
-      const cache = await caches.open('sq-fonts');
+      caches.delete('sq-fonts').catch(() => {});
+      const cache = await caches.open('sq-fonts-2');
       let list = await cache.match('fonts.json').then((r) => r?.json());
       if (!list) {
         const r = await gh('contents/fonts/fonts.json');

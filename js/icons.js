@@ -8,4 +8,6 @@ export const icon = {
   // Pelvic floor (Lasciare andare): the floor's "hammock" as a crescent moon
   // lying down for the evening, with a star.
   moonHammock: svg('<path d="M3.5 11.5a8.5 8.5 0 0 0 17 0 10.5 6.5 0 0 1-17 0Z" fill="currentColor" fill-opacity=".2"/><path d="M17.5 2.8l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7Z" fill="currentColor" stroke-width="1"/>'),
+  // Face (Specchio d'acqua): a drop falling on still water.
+  ripple: svg('<path d="M12 2.5c2.3 2.8 3.6 4.8 3.6 6.5a3.6 3.6 0 0 1-7.2 0c0-1.7 1.3-3.7 3.6-6.5Z" fill="currentColor" fill-opacity=".2"/><ellipse cx="12" cy="18.5" rx="9.5" ry="2.6"/><ellipse cx="12" cy="18.5" rx="4.5" ry="1.1" stroke-width="1.5"/>'),
 };
