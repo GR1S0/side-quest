@@ -10,7 +10,8 @@
 // view(root) → optional cleanup function.
 import pelvicFloor from './pelvic-floor/index.js';
 import face from './face/index.js';
+import foot from './foot/index.js';
 
-export const quests = [pelvicFloor, face];
+export const quests = [pelvicFloor, face, foot];
 
 export const getQuest = (id) => quests.find((q) => q.id === id);
