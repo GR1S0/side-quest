@@ -20,6 +20,8 @@ const PHASES = {
   4: { name: 'Corsa', ex: { 'm-hr': ['week', 2], 'm-plio': ['week', 2], 'm-core': ['week', 2] } },
 };
 const XP = { exercise: 5, day: 20, pain: 5 };
+// The day ends at 4am, as in boot.js: a session after midnight counts for the evening before.
+const DAY_ENDS_AT = 4;
 
 const iso = (d) => {
   const x = new Date(d);
@@ -50,7 +52,7 @@ function complete(S, date) {
 function summary(S) {
   S = S || {};
   const ph = String(S.phase || 1);
-  const today = iso(new Date());
+  const today = iso(new Date(Date.now() - DAY_ENDS_AT * 36e5));
   const all = Object.entries(PHASES[ph].ex);
   const daily = all.filter(([, [per]]) => per === 'day');
   const list = daily.length ? daily : all;
