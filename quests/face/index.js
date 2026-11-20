@@ -17,6 +17,10 @@ const NEED = { 1: 8, 2: 9, 3: 9 };
 const NEED_SHORT = 4;
 const NAMES = { 1: 'Increspatura', 2: 'Fondale', 3: 'Specchio' };
 const XP = { step: 3, night: 15, ascolto: 5 };
+// The ritual is paused (the user's choice, 2026-11-21): the world waits under a
+// lock on the home until it is opened again after this moment. To pause it
+// again later, move PAUSED forward; to drop the pause, remove locked/unlock.
+const PAUSED = '2026-11-20T23:40:00Z';
 
 const iso = (d) => {
   const x = new Date(d);
@@ -119,6 +123,12 @@ export default {
   title: 'Viso',
   world: { css: WORLD, kicker: 'Rituale serale · Viso', name: 'Specchio <em>d’acqua</em>' },
   icon: icon.ripple,
+  locked: (S) => !(S?.unlocked > PAUSED),
+  unlock: {
+    status: 'In pausa',
+    quote: 'L’acqua torna ferma da sola, quando smetti di agitarla.',
+    text: 'Il rituale serale è in pausa. Riaprendo il mondo riprendi dalla fase in cui eri, con tutte le notti già fatte. Te la senti?',
+  },
   summary,
   xp,
   view,

@@ -151,7 +151,7 @@ function lockedCard(q) {
         <span class="quest-text">
           <span class="quest-kicker">${esc(q.world.kicker)}</span>
           <span class="quest-title">${q.world.name}</span>
-          <span class="quest-detail">Mondo chiuso</span>
+          <span class="quest-detail">${esc(q.unlock?.status || 'Mondo chiuso')}</span>
         </span>
         <span class="lock" data-sq="18" aria-hidden="true">${icon.lock}</span>
       </div>

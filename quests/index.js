@@ -8,7 +8,8 @@
 // summary(data) → { today, goal, streak, detail } for the home card.
 // xp(data) → experience earned so far, derived from the quest's own data.
 // locked(data) → optional: true while the world is closed (a lock on the home);
-// unlock = { quote, text } is the question asked before opening it.
+// unlock = { quote, text, status? } is the question asked before opening it;
+// status replaces "Mondo chiuso" on the card (e.g. "In pausa").
 // view(root) → optional cleanup function.
 import pelvicFloor from './pelvic-floor/index.js';
 import face from './face/index.js';
