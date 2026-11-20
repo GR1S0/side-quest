@@ -180,6 +180,33 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .chev { color: var(--w-ink2, var(--muted)); display: flex; }
 .chev svg { width: 18px; height: 18px; }
 
+/* A closed world: the card fades to grey under an amber lock (the gem's colour,
+   SideQuest's own, since the world isn't open yet). */
+.quest.is-locked { cursor: pointer; --sq-fill: color-mix(in srgb, var(--w-bg, var(--panel)) 30%, #5d6466); --sq-edge: color-mix(in srgb, #ffffff 14%, transparent); }
+.quest.is-locked > :not(.sq):not(.lock) { filter: grayscale(1); opacity: 0.42; }
+.quest.is-locked:hover { --sq-edge: color-mix(in srgb, var(--gold) 55%, transparent); }
+.lock {
+  width: 54px; height: 54px; flex: none; display: grid; place-items: center; color: var(--on-coin);
+  --sq-fill: var(--coin); --sq-shadow: drop-shadow(0 0 14px var(--coin-glow)) drop-shadow(0 4px 8px rgb(0 0 0 / 0.4));
+  transition: transform 0.15s;
+}
+.lock svg:not(.sq) { width: 26px; height: 26px; }
+.quest.is-locked:hover .lock { --sq-fill: var(--coin-hi); transform: scale(1.05); }
+
+/* The question that opens a world. */
+.unlockw { border: 0; padding: 0; background: none; color: var(--text); width: 100%; max-width: min(420px, calc(100vw - 32px)); }
+.unlockw::backdrop { background: rgb(4 12 14 / 0.72); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.uw { padding: 26px 22px 20px; display: flex; flex-direction: column; gap: 14px; text-align: center; --sq-fill: var(--panel); --sq-edge: color-mix(in srgb, var(--gold) 45%, var(--line)); --sq-edge-width: 1.5px; --sq-shadow: var(--card-shadow); }
+.uw-k { font: 400 11px var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+.uw-name { font: 300 2rem/1.05 var(--display); }
+.uw-name em { font-style: normal; }
+.uw-q { display: block; font: 300 1.2rem/1.35 var(--display); color: var(--text); quotes: none; }
+.uw-t { color: var(--muted); }
+.uw-b { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+.uw-b button { min-height: 50px; border: 0; background: none; cursor: pointer; font: 500 1rem var(--body); }
+.uw-yes { color: var(--on-coin); --sq-fill: var(--coin); }
+.uw-no { color: var(--text); --sq-fill: var(--panel-2); --sq-edge: var(--line); --sq-edge-width: 1px; }
+
 /* ── Setup (installed app, first launch) ── */
 .setup { display: flex; flex-direction: column; gap: 10px; padding: 22px 20px; --sq-fill: var(--panel); --sq-edge: var(--line); --sq-edge-width: 1px; --sq-shadow: var(--card-shadow); }
 .setup h2 { font: 300 1.6rem/1.1 var(--display); }

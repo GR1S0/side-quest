@@ -2,7 +2,7 @@
 // navigation lives in memory. Routes: "/" (home) and "/quest/<id>".
 // A link to the page with #<quest id> opens that quest directly.
 import { quests, getQuest } from '../quests/index.js';
-import { initStore } from './store.js';
+import { initStore, store } from './store.js';
 import { homeView } from './home.js';
 import { unlockView } from './unlock.js';
 
@@ -16,7 +16,9 @@ function go(path) {
   root.innerHTML = '';
   window.scrollTo(0, 0);
   const [, section, id] = path.split('/');
-  const quest = section === 'quest' && getQuest(id);
+  let quest = section === 'quest' && getQuest(id);
+  // A closed world opens only from its lock on the home.
+  if (quest?.locked?.(store.get(quest.id))) quest = null;
   cleanup = (quest ? quest.view(root) : homeView(root)) || null;
 }
 

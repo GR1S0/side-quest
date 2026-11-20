@@ -7,11 +7,14 @@
 // uses; name is the quest's own title, as markup.
 // summary(data) → { today, goal, streak, detail } for the home card.
 // xp(data) → experience earned so far, derived from the quest's own data.
+// locked(data) → optional: true while the world is closed (a lock on the home);
+// unlock = { quote, text } is the question asked before opening it.
 // view(root) → optional cleanup function.
 import pelvicFloor from './pelvic-floor/index.js';
 import face from './face/index.js';
 import foot from './foot/index.js';
+import grip from './grip/index.js';
 
-export const quests = [pelvicFloor, face, foot];
+export const quests = [pelvicFloor, face, foot, grip];
 
 export const getQuest = (id) => quests.find((q) => q.id === id);

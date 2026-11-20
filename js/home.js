@@ -32,8 +32,11 @@ export function homeView(root) {
 function draw(root) {
   const totalXP = quests.reduce((sum, q) => sum + q.xp(store.get(q.id)), 0);
   const pl = playerLevel(totalXP);
-  const cards = quests.map((q) => ({ q, s: q.summary(store.get(q.id)) }));
-  const doneToday = cards.filter(({ s }) => s.today >= s.goal).length;
+  // A quest can start closed (locked(data)): its card shows under a lock until
+  // the player opens its world, and it doesn't count among today's quests.
+  const cards = quests.map((q) => ({ q, s: q.summary(store.get(q.id)), locked: !!q.locked?.(store.get(q.id)) }));
+  const open = cards.filter((c) => !c.locked);
+  const doneToday = open.filter(({ s }) => s.today >= s.goal).length;
 
   root.innerHTML = `
     <header class="masthead">
@@ -54,7 +57,7 @@ function draw(root) {
 
     <section class="board">
       <h2 class="rule-title"><span>Side quest attive</span></h2>
-      <p class="board-meta">${doneToday} di ${quests.length} completate oggi</p>
+      <p class="board-meta">${doneToday} di ${open.length} completate oggi</p>
       <ul class="quests">${cards.map(questCard).join('')}</ul>
     </section>
 
@@ -66,7 +69,43 @@ function draw(root) {
         <p><strong>Mac</strong>: in Chrome, menu ⋮, Trasmetti, salva e condividi, “Installa pagina come app”.</p>
       </details>
       ${store.mode() === 'github' ? '<button class="unlink" type="button" data-act="unlink">Scollega questo dispositivo dai dati</button>' : ''}
-    </footer>`;
+    </footer>
+    <dialog class="unlockw" data-el="unlockw" aria-labelledby="uw-name">
+      <form method="dialog" class="uw" data-sq="30">
+        <p class="uw-k">Sblocca mondo</p>
+        <h2 class="uw-name" id="uw-name"></h2>
+        <q class="uw-q"></q>
+        <p class="uw-t"></p>
+        <div class="uw-b">
+          <button class="uw-no" data-sq="20" value="no">Non ancora</button>
+          <button class="uw-yes" data-sq="20" value="yes" type="button">Sì, sblocca</button>
+        </div>
+      </form>
+    </dialog>`;
+
+  const dlg = root.querySelector('[data-el=unlockw]');
+  root.querySelectorAll('[data-unlock]').forEach((el) => {
+    el.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      el.click();
+    });
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const q = quests.find((x) => x.id === el.dataset.unlock);
+      dlg.querySelector('.uw-name').innerHTML = q.world.name;
+      dlg.querySelector('.uw-q').textContent = q.unlock?.quote || '';
+      dlg.querySelector('.uw-t').textContent = q.unlock?.text || '';
+      const yes = dlg.querySelector('.uw-yes');
+      yes.dataset.go = `/quest/${q.id}`;
+      yes.onclick = () => {
+        // Opens the world; the click then reaches the router (data-go) and enters it.
+        store.set(q.id, { ...(store.get(q.id) || {}), unlocked: new Date().toISOString() });
+        dlg.close();
+      };
+      dlg.showModal();
+    });
+  });
 
   root.querySelector('[data-act=unlink]')?.addEventListener('click', (e) => {
     const btn = e.currentTarget;
@@ -81,7 +120,8 @@ function draw(root) {
   return applySquircles(root);
 }
 
-function questCard({ q, s }) {
+function questCard({ q, s, locked }) {
+  if (locked) return lockedCard(q);
   const done = s.today >= s.goal;
   return `
     <li>
@@ -98,5 +138,22 @@ function questCard({ q, s }) {
         </span>
         <span class="chev">${icon.chev}</span>
       </a>
+    </li>`;
+}
+
+// A closed world: the card shows the quest in grey under a lock; the card and
+// the lock both ask whether to open it.
+function lockedCard(q) {
+  return `
+    <li>
+      <div class="quest w-${q.id} is-locked" data-sq="28" data-unlock="${q.id}" role="button" tabindex="0" aria-label="${esc(q.title)}: mondo chiuso, tocca per sbloccarlo">
+        <span class="quest-icon" data-sq="16">${q.icon}</span>
+        <span class="quest-text">
+          <span class="quest-kicker">${esc(q.world.kicker)}</span>
+          <span class="quest-title">${q.world.name}</span>
+          <span class="quest-detail">Mondo chiuso</span>
+        </span>
+        <span class="lock" data-sq="18" aria-hidden="true">${icon.lock}</span>
+      </div>
     </li>`;
 }
