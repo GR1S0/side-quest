@@ -1,4 +1,4 @@
-// The game menu inside a world: a bar that drops in from the top when the
+// The game menu inside a world: a bar that rises from the bottom when the
 // player scrolls up, and leaves when they scroll down or stop for a moment.
 // Each world keeps its own "‹ SideQuest" at the top of its page; this one
 // reaches the map from anywhere without scrolling back up. It lives in the
