@@ -6,6 +6,7 @@ import { initStore, store } from './store.js';
 import { homeView } from './home.js';
 import { unlockView } from './unlock.js';
 import { gameMenu } from './gamemenu.js';
+import { tintWorld } from './tint.js';
 
 const root = document.getElementById('app');
 let cleanup = null;
@@ -23,7 +24,8 @@ function go(path) {
   if (!quest) { cleanup = homeView(root) || null; return; }
   const offView = quest.view(root);
   const offMenu = gameMenu(quest);
-  cleanup = () => { offMenu(); offView?.(); };
+  const offTint = tintWorld(root);
+  cleanup = () => { offTint(); offMenu(); offView?.(); };
 }
 
 // composedPath reaches links inside a quest's shadow root.
