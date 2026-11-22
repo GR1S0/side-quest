@@ -36,6 +36,7 @@ function draw(root) {
   // the player opens its world, and it doesn't count among today's quests.
   const cards = quests.map((q) => ({ q, s: q.summary(store.get(q.id)), locked: !!q.locked?.(store.get(q.id)) }));
   const open = cards.filter((c) => !c.locked);
+  const closed = cards.filter((c) => c.locked);
   const doneToday = open.filter(({ s }) => s.today >= s.goal).length;
 
   root.innerHTML = `
@@ -58,18 +59,15 @@ function draw(root) {
     <section class="board">
       <h2 class="rule-title"><span>Side quest attive</span></h2>
       <p class="board-meta">${doneToday} di ${open.length} completate oggi</p>
-      <ul class="quests">${cards.map(questCard).join('')}</ul>
+      <ul class="quests">${open.map(questCard).join('')}</ul>
     </section>
-
-    <footer class="foot">
-      <p class="sync" data-el="sync" data-state="${store.status().state}">${esc(store.status().text)}</p>
-      <details class="install">
-        <summary>Tienila a portata di mano</summary>
-        <p><strong>iPhone</strong>: apri questa pagina in Safari, Condividi, “Aggiungi alla schermata Home”.</p>
-        <p><strong>Mac</strong>: in Chrome, menu ⋮, Trasmetti, salva e condividi, “Installa pagina come app”.</p>
-      </details>
-      ${store.mode() === 'github' ? '<button class="unlink" type="button" data-act="unlink">Scollega questo dispositivo dai dati</button>' : ''}
-    </footer>
+${closed.length ? `
+    <section class="board">
+      <h2 class="rule-title"><span>Da sbloccare</span></h2>
+      <ul class="quests">${closed.map(questCard).join('')}</ul>
+    </section>
+` : ''}
+    <p class="sync" data-el="sync" data-state="${store.status().state}">${esc(store.status().text)}</p>
     <dialog class="unlockw" data-el="unlockw" aria-labelledby="uw-name">
       <form method="dialog" class="uw" data-sq="30">
         <p class="uw-k">Sblocca mondo</p>
@@ -107,16 +105,6 @@ function draw(root) {
     });
   });
 
-  root.querySelector('[data-act=unlink]')?.addEventListener('click', (e) => {
-    const btn = e.currentTarget;
-    if (btn.dataset.confirm !== '1') {
-      btn.dataset.confirm = '1';
-      btn.textContent = 'Tocca di nuovo per scollegare (i dati restano su GitHub)';
-      return;
-    }
-    ['sq-gh', 'sq-gh-cache', 'sq-bio', 'sq-bio-wait', 'sq-ask'].forEach((k) => localStorage.removeItem(k));
-    location.reload();
-  });
   return applySquircles(root);
 }
 

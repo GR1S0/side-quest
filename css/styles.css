@@ -105,7 +105,7 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .sq path { fill: var(--sq-fill, transparent); stroke: var(--sq-edge, transparent); stroke-width: var(--sq-edge-width, 0); transition: stroke 0.2s, fill 0.2s; }
 
 /* ── Masthead ── */
-.masthead { display: flex; flex-direction: column; gap: 6px; }
+.masthead { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
 .wordmark {
   display: flex; align-items: center; gap: 12px;
   font: 800 clamp(2.4rem, 11vw, 3.4rem)/1 var(--display);
@@ -216,7 +216,6 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .setup input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
 .setup-btn { margin-top: 8px; min-height: 50px; border: 0; background: none; cursor: pointer; font: 500 1rem var(--body); color: var(--on-coin); --sq-fill: var(--coin); }
 .setup-note { font: 400 11.5px var(--mono); color: var(--muted); }
-.unlink { align-self: flex-start; background: none; border: 0; padding: 0; cursor: pointer; font: 400 11.5px var(--mono); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ── Unlock (installed app, opened with the code) ── */
 .unlock { display: flex; flex-direction: column; gap: 12px; padding: 24px 20px; text-align: center; --sq-fill: var(--panel); --sq-edge: var(--line); --sq-edge-width: 1px; --sq-shadow: var(--card-shadow); }
@@ -232,17 +231,14 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .unlock-err { color: var(--bad); min-height: 1.4em; font-size: 0.9rem; }
 
 /* ── Footer ── */
-.foot { margin-top: auto; display: flex; flex-direction: column; gap: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
-.sync { display: inline-flex; align-items: center; gap: 8px; font: 400 11.5px var(--mono); color: var(--muted); letter-spacing: 0.04em; }
+/* Only problems show: "Sincronizzato" and the brief "Salvataggio…" stay hidden. */
+.sync { margin-top: auto; align-self: center; display: inline-flex; align-items: center; gap: 8px; font: 400 11.5px var(--mono); color: var(--muted); letter-spacing: 0.04em; }
 .sync::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
 .sync[data-state="ok"]::before { background: var(--ok); }
 .sync[data-state="busy"]::before { background: var(--warn); }
 .sync[data-state="err"]::before { background: var(--bad); }
 .sync[data-state="err"] { color: var(--bad); }
-.install { font-size: 0.88rem; color: var(--muted); }
-.install summary { cursor: pointer; font: 400 11.5px var(--mono); letter-spacing: 0.04em; }
-.install p { margin-top: 8px; max-width: 60ch; }
-.install strong { color: var(--text); font-weight: 500; }
+.sync[data-state="ok"], .sync[data-state="busy"] { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
