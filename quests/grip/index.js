@@ -27,11 +27,11 @@ const add = (s, n) => {
   d.setDate(d.getDate() + n);
   return iso(d);
 };
-// The day ends at 4 am: a session after midnight counts for the evening before.
+// The day ends at 5 am: a session after midnight counts for the evening before.
 // Keep in step with dayOf() in page.js.
 const dayKey = () => {
   const d = new Date();
-  if (d.getHours() < 4) d.setDate(d.getDate() - 1);
+  if (d.getHours() < 5) d.setDate(d.getDate() - 1);
   return iso(d);
 };
 

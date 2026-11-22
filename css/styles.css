@@ -258,7 +258,6 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
   color: var(--w-ink, var(--text)); text-decoration: none;
   font: 600 11px var(--w-mono, var(--mono)); letter-spacing: 0.14em; text-transform: uppercase;
 }
-.gm-home img { width: auto; height: 18px; }
 .gm-chev { display: flex; margin-left: -4px; color: var(--w-ink, var(--text)); }
 .gm-chev svg { width: 22px; height: 22px; stroke-width: 2.2; }
 .gm-top svg { width: 22px; height: 22px; stroke-width: 2.2; }

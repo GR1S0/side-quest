@@ -16,7 +16,7 @@ export function gameMenu(quest) {
   bar.setAttribute('aria-label', 'Menu di gioco');
   bar.innerHTML = `
     <div class="gm w-${quest.id}" data-sq="22">
-      <a class="gm-home" href="#" data-go="/"><span class="gm-chev">${icon.back}</span><img src="icons/gem.png" alt="" width="14" height="20">Mondi</a>
+      <a class="gm-home" href="#" data-go="/"><span class="gm-chev">${icon.back}</span>Mondi</a>
       <span class="gm-world">${quest.world.name}</span>
       <button class="gm-top" type="button" aria-label="Torna all'inizio del mondo">${icon.up}</button>
     </div>`;

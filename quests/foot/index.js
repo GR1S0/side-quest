@@ -20,8 +20,8 @@ const PHASES = {
   4: { name: 'Corsa', ex: { 'm-hr': ['week', 2], 'm-plio': ['week', 2], 'm-core': ['week', 2] } },
 };
 const XP = { exercise: 5, day: 20, pain: 5 };
-// The day ends at 4am, as in boot.js: a session after midnight counts for the evening before.
-const DAY_ENDS_AT = 4;
+// The day ends at 5am, as in boot.js: a session after midnight counts for the evening before.
+const DAY_ENDS_AT = 5;
 
 const iso = (d) => {
   const x = new Date(d);
