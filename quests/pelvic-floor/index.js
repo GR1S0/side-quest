@@ -29,10 +29,10 @@ const add = (s, n) => {
   d.setDate(d.getDate() + n);
   return iso(d);
 };
-// The night lasts until 5 am: a session at 1 am counts for the evening before.
+// The night lasts until 6 am: a session at 1 am counts for the evening before.
 const tonightKey = () => {
   const d = new Date();
-  if (d.getHours() < 5) d.setDate(d.getDate() - 1);
+  if (d.getHours() < 6) d.setDate(d.getDate() - 1);
   return iso(d);
 };
 const weekStart = (s) => add(s, -((new Date(`${s}T12:00:00`).getDay() + 6) % 7));
