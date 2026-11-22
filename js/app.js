@@ -5,6 +5,7 @@ import { quests, getQuest } from '../quests/index.js';
 import { initStore, store } from './store.js';
 import { homeView } from './home.js';
 import { unlockView } from './unlock.js';
+import { gameMenu } from './gamemenu.js';
 
 const root = document.getElementById('app');
 let cleanup = null;
@@ -19,7 +20,10 @@ function go(path) {
   let quest = section === 'quest' && getQuest(id);
   // A closed world opens only from its lock on the home.
   if (quest?.locked?.(store.get(quest.id))) quest = null;
-  cleanup = (quest ? quest.view(root) : homeView(root)) || null;
+  if (!quest) { cleanup = homeView(root) || null; return; }
+  const offView = quest.view(root);
+  const offMenu = gameMenu(quest);
+  cleanup = () => { offMenu(); offView?.(); };
 }
 
 // composedPath reaches links inside a quest's shadow root.

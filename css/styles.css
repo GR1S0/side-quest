@@ -230,6 +230,50 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .unlock-link { background: none; border: 0; padding: 6px; cursor: pointer; font: 400 12px var(--mono); color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 .unlock-err { color: var(--bad); min-height: 1.4em; font-size: 0.9rem; }
 
+/* ── Game menu inside a world (js/gamemenu.js) ──
+   Drops in from the top on a scroll up, in the world's own colours. */
+.gmenu {
+  position: fixed; z-index: 50; left: 0; right: 0;
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  display: flex; justify-content: center; padding: 0 12px;
+  pointer-events: none;
+  transform: translateY(calc(-100% - env(safe-area-inset-top, 0px) - 16px));
+  opacity: 0;
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+}
+.gmenu.is-on { transform: none; opacity: 1; pointer-events: auto; }
+.gm {
+  display: flex; align-items: center; gap: 10px;
+  width: min(520px, 100%); min-height: 50px; padding: 0 6px 0 14px;
+  color: var(--w-ink, var(--text));
+  --sq-fill: color-mix(in srgb, var(--w-bg, var(--panel)) 88%, transparent);
+  --sq-edge: color-mix(in srgb, var(--w-mark, var(--gold)) 45%, var(--w-line, var(--line)));
+  --sq-edge-width: 1px;
+  --sq-shadow: var(--card-shadow);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.gm-home {
+  display: inline-flex; align-items: center; gap: 6px; flex: none; min-height: 44px;
+  color: var(--w-ink, var(--text)); text-decoration: none;
+  font: 600 11px var(--w-mono, var(--mono)); letter-spacing: 0.14em; text-transform: uppercase;
+}
+.gm-home img { width: auto; height: 18px; }
+.gm-chev { display: flex; transform: scaleX(-1); color: var(--w-ink2, var(--muted)); }
+.gm-chev svg, .gm-top svg { width: 18px; height: 18px; }
+.gm-world {
+  flex: 1; min-width: 0; text-align: center;
+  font: 400 1.1rem/1 var(--w-display, var(--display));
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gm-world em { font-style: normal; color: var(--w-accent); }
+.gm-top {
+  flex: none; width: 44px; height: 44px; display: grid; place-items: center;
+  background: none; border: 0; cursor: pointer; color: var(--w-mark, var(--gold));
+}
+.gm-top svg { transform: rotate(-90deg); }
+.gm-home:focus-visible, .gm-top:focus-visible { outline: 2px solid var(--w-mark, var(--gold)); outline-offset: 2px; border-radius: 8px; }
+@media (prefers-reduced-motion: reduce) { .gmenu { transition: opacity 0.2s; transform: none; } }
+
 /* ── Footer ── */
 /* Only problems show: "Sincronizzato" and the brief "Salvataggio…" stay hidden. */
 .sync { margin-top: auto; align-self: center; display: inline-flex; align-items: center; gap: 8px; font: 400 11.5px var(--mono); color: var(--muted); letter-spacing: 0.04em; }
