@@ -174,12 +174,17 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .pips i { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--w-ink2, var(--muted)); opacity: 0.7; }
 .pips i.on { background: var(--w-mark); border-color: var(--w-mark); opacity: 1; }
 .streak { display: inline-flex; align-items: center; gap: 3px; font: 600 12px var(--w-mono, var(--mono)); color: var(--w-accent, var(--ember)); }
-.streak svg { width: 14px; height: 14px; }
+.streak svg:not(.sq) { width: 14px; height: 14px; }
 .streak.is-zero { color: var(--w-ink2, var(--muted)); opacity: 0.7; }
 .i-flame { fill: currentColor; fill-opacity: 0.25; }
-/* Yesterday was forgiven and today is still open: the flame is only an outline. */
-.streak.is-risk { opacity: 0.75; }
-.streak.is-risk .i-flame { fill-opacity: 0; stroke-dasharray: 3 2; }
+/* Streak in danger: yesterday was empty and today is still open. The card takes
+   the world's accent on its edge, the streak turns into a lit badge with a
+   flickering flame, and a line under the phase says what to do. */
+.quest.is-risk { --sq-edge: var(--w-accent, var(--ember)); --sq-edge-width: 2px; }
+.quest-risk { font: 600 11.5px/1.35 var(--w-mono, var(--mono)); color: var(--w-accent, var(--ember)); }
+.streak.is-risk { padding: 3px 8px 3px 6px; color: var(--w-bg, var(--panel)); --sq-fill: var(--w-accent, var(--ember)); }
+.streak.is-risk .i-flame { fill-opacity: 1; transform-origin: 50% 90%; animation: flicker 1.6s ease-in-out infinite; }
+@keyframes flicker { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.12, 1.18) rotate(-4deg); } 70% { transform: scale(0.94, 0.97) rotate(3deg); } }
 .chev { color: var(--w-ink2, var(--muted)); display: flex; }
 .chev svg { width: 18px; height: 18px; }
 

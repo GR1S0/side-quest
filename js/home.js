@@ -113,16 +113,17 @@ function questCard({ q, s, locked }) {
   const done = s.today >= s.goal;
   return `
     <li>
-      <a class="quest w-${q.id} ${done ? 'is-done' : ''}" href="#${q.id}" data-go="/quest/${q.id}" data-sq="28" aria-label="${esc(q.title)}">
+      <a class="quest w-${q.id} ${done ? 'is-done' : ''} ${s.risk ? 'is-risk' : ''}" href="#${q.id}" data-go="/quest/${q.id}" data-sq="28" aria-label="${esc(q.title)}">
         <span class="quest-icon" data-sq="16">${done ? icon.check : q.icon}</span>
         <span class="quest-text">
           <span class="quest-kicker">${esc(q.world.kicker)}</span>
           <span class="quest-title">${q.world.name}</span>
           <span class="quest-detail">${esc(s.detail)}</span>
+          ${s.risk ? '<span class="quest-risk">Serie in pericolo · fallo oggi</span>' : ''}
         </span>
         <span class="quest-stats">
           <span class="pips" aria-label="${s.today} di ${s.goal} oggi">${pips(s.today, s.goal)}</span>
-          <span class="streak ${s.streak ? '' : 'is-zero'} ${s.risk ? 'is-risk' : ''}" aria-label="Serie di ${s.streak} notti${s.risk ? ', a rischio: ieri è saltato, oggi va fatta' : ''}"${s.risk ? ' title="Ieri è saltato: fallo oggi per tenere la serie"' : ''}>${icon.flame}${s.streak}</span>
+          <span class="streak ${s.streak ? '' : 'is-zero'} ${s.risk ? 'is-risk' : ''}" aria-label="Serie di ${s.streak} notti${s.risk ? ', in pericolo' : ''}"${s.risk ? ' data-sq="9"' : ''}>${icon.flame}${s.streak}</span>
         </span>
         <span class="chev">${icon.chev}</span>
       </a>
