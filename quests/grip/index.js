@@ -11,6 +11,7 @@ import { store } from '../../js/store.js';
 import { loadPrivate } from '../../js/private.js';
 import { icon } from '../../js/icons.js';
 import { autoSquircle } from '../../js/squircle.js';
+import { streakOf } from '../../js/util.js';
 
 const ID = 'grip';
 const XP = { setup: 50, A: 20, B: 20, R: 5, goal: 40 };
@@ -41,15 +42,10 @@ function summary(S) {
   S = S || {};
   const today = dayKey();
   const ph = S.setup?.done ? S.phase || 1 : 0;
-  let d = doneOn(S, today) ? today : add(today, -1);
-  let streak = 0;
-  while (doneOn(S, d)) {
-    streak++;
-    d = add(d, -1);
-  }
+  const { streak, risk } = streakOf((d) => doneOn(S, d), today, add);
   const last = S.log?.[today];
   const detail = ph === 0 ? 'Fase 0 · Setup' : `Fase ${ph} · ${NAMES[ph]}${last?.full ? ` · ${KIND[last.kind]} fatta` : ''}`;
-  return { today: doneOn(S, today) ? 1 : 0, goal: 1, streak, detail };
+  return { today: doneOn(S, today) ? 1 : 0, goal: 1, streak, risk, detail };
 }
 
 function xp(S) {

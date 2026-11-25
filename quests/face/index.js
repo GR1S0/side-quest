@@ -8,6 +8,7 @@ import { store } from '../../js/store.js';
 import { loadPrivate } from '../../js/private.js';
 import { icon } from '../../js/icons.js';
 import { autoSquircle } from '../../js/squircle.js';
+import { streakOf } from '../../js/util.js';
 
 const ID = 'face';
 
@@ -49,13 +50,8 @@ function summary(S) {
   const night = S.log?.[today];
   const goal = night?.short || (ph === 3 && S.short) ? NEED_SHORT : NEED[night?.p || ph];
   const done = Math.min(goal, night?.ids?.length || 0);
-  let d = full(S, today) ? today : add(today, -1);
-  let streak = 0;
-  while (full(S, d)) {
-    streak++;
-    d = add(d, -1);
-  }
-  return { today: done, goal, streak, detail: `Fase ${ph} · ${NAMES[ph]}` };
+  const { streak, risk } = streakOf((d) => full(S, d), today, add);
+  return { today: done, goal, streak, risk, detail: `Fase ${ph} · ${NAMES[ph]}` };
 }
 
 function xp(S) {

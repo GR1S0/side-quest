@@ -9,6 +9,7 @@ import { store } from '../../js/store.js';
 import { loadPrivate } from '../../js/private.js';
 import { icon } from '../../js/icons.js';
 import { autoSquircle } from '../../js/squircle.js';
+import { streakOf } from '../../js/util.js';
 
 const ID = 'foot';
 
@@ -57,13 +58,8 @@ function summary(S) {
   const daily = all.filter(([, [per]]) => per === 'day');
   const list = daily.length ? daily : all;
   const done = list.filter(([id, [per, t]]) => (per === 'day' ? cnt(S, id, today) : cntWeek(S, id, today)) >= t).length;
-  let day = trained(S, today) ? today : add(today, -1);
-  let streak = 0;
-  while (trained(S, day)) {
-    streak++;
-    day = add(day, -1);
-  }
-  return { today: done, goal: list.length, streak, detail: `Fase ${ph} · ${PHASES[ph].name}` };
+  const { streak, risk } = streakOf((d) => trained(S, d), today, add);
+  return { today: done, goal: list.length, streak, risk, detail: `Fase ${ph} · ${PHASES[ph].name}` };
 }
 
 function xp(S) {

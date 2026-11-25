@@ -177,6 +177,9 @@ svg { width: 1.25em; height: 1.25em; flex: none; }
 .streak svg { width: 14px; height: 14px; }
 .streak.is-zero { color: var(--w-ink2, var(--muted)); opacity: 0.7; }
 .i-flame { fill: currentColor; fill-opacity: 0.25; }
+/* Yesterday was forgiven and today is still open: the flame is only an outline. */
+.streak.is-risk { opacity: 0.75; }
+.streak.is-risk .i-flame { fill-opacity: 0; stroke-dasharray: 3 2; }
 .chev { color: var(--w-ink2, var(--muted)); display: flex; }
 .chev svg { width: 18px; height: 18px; }
 

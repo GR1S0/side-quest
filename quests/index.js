@@ -5,7 +5,8 @@
 // Every quest is a world of its own. world = { css, kicker, name }: css defines
 // the class .w-<id> with the --w-* tokens (faces and palette) its home card
 // uses; name is the quest's own title, as markup.
-// summary(data) → { today, goal, streak, detail } for the home card.
+// summary(data) → { today, goal, streak, risk, detail } for the home card
+// (streak and risk from streakOf in js/util.js).
 // xp(data) → experience earned so far, derived from the quest's own data.
 // locked(data) → optional: true while the world is closed (a lock on the home);
 // unlock = { quote, text, status? } is the question asked before opening it;

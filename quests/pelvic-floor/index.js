@@ -7,6 +7,7 @@ import { store } from '../../js/store.js';
 import { loadPrivate } from '../../js/private.js';
 import { icon } from '../../js/icons.js';
 import { autoSquircle } from '../../js/squircle.js';
+import { streakOf } from '../../js/util.js';
 
 const ID = 'pelvic-floor';
 
@@ -64,13 +65,8 @@ function summary(S) {
   const daily = all.filter(([, [per]]) => per === 'day');
   const list = daily.length ? daily : all;
   const done = list.filter(([id, [per, t]]) => (per === 'day' ? cnt(S, ph, id, today) : cntWeek(S, ph, id, today)) >= t).length;
-  let night = nightLevel(S, today) ? today : add(today, -1);
-  let streak = 0;
-  while (nightLevel(S, night)) {
-    streak++;
-    night = add(night, -1);
-  }
-  return { today: done, goal: list.length, streak, detail: `Fase ${ph} · ${PHASES[ph].name}` };
+  const { streak, risk } = streakOf((d) => nightLevel(S, d), today, add);
+  return { today: done, goal: list.length, streak, risk, detail: `Fase ${ph} · ${PHASES[ph].name}` };
 }
 
 // The quest's world on the SideQuest home: the page's own faces and palette

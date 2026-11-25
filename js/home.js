@@ -122,7 +122,7 @@ function questCard({ q, s, locked }) {
         </span>
         <span class="quest-stats">
           <span class="pips" aria-label="${s.today} di ${s.goal} oggi">${pips(s.today, s.goal)}</span>
-          <span class="streak ${s.streak ? '' : 'is-zero'}" aria-label="Serie di ${s.streak} notti">${icon.flame}${s.streak}</span>
+          <span class="streak ${s.streak ? '' : 'is-zero'} ${s.risk ? 'is-risk' : ''}" aria-label="Serie di ${s.streak} notti${s.risk ? ', a rischio: ieri è saltato, oggi va fatta' : ''}"${s.risk ? ' title="Ieri è saltato: fallo oggi per tenere la serie"' : ''}>${icon.flame}${s.streak}</span>
         </span>
         <span class="chev">${icon.chev}</span>
       </a>
